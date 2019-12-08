@@ -2,7 +2,9 @@ package com.limesplash.gitrepobrowser.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.hannesdorfmann.mosby3.mvi.MviActivity
+import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.limesplash.gitrepobrowser.R
 import com.limesplash.gitrepobrowser.model.GitReposViewState
@@ -11,6 +13,7 @@ import com.limesplash.gitrepobrowser.presenter.SearchReposPresenter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity: GitReposView,  MviActivity<GitReposView, SearchReposPresenter>() {
 
@@ -20,23 +23,43 @@ class MainActivity: GitReposView,  MviActivity<GitReposView, SearchReposPresente
 
         searchQueryObservable = RxTextView.textChangeEvents(search_text)
             .observeOn(AndroidSchedulers.mainThread())
+            .debounce(500, TimeUnit.MILLISECONDS)
             .filter { it != null }
             .map { it.text().toString() }
+
+        applyFiltersObservable = RxView.clicks(apply_filters)
+
+        show_filters.setOnClickListener { toggleFilters() }
+
+        filters_container.visibility = View.GONE
     }
 
     private lateinit var searchQueryObservable: Observable<String>
 
-    //TODO
-    override fun emitUserInput(): Observable<UIEvent> =
-        searchQueryObservable.map { UIEvent.UISerchRepoEvent(it) }
+    private lateinit var applyFiltersObservable :Observable<Any?>
+
+    override fun emitUserInput(): Observable<UIEvent> = Observable.merge (
+            searchQueryObservable.map { UIEvent.UISerchRepoEvent(it, topic_text.text.toString(), lang_text.text.toString()) },
+            applyFiltersObservable.map { UIEvent.UISerchRepoEvent(search_text.text.toString(), topic_text.text.toString(), lang_text.text.toString()) }
+        )
 
 
     override fun updateUi(state: GitReposViewState) {
         repos_list.adapter = ReposAdapter(state.searchResult.repositories)
+        result_count.text = state.searchResult.totalCount.toString()+" Hits"
     }
 
     override fun createPresenter(): SearchReposPresenter {
         //TODO inject
         return SearchReposPresenter()
+    }
+
+    //this is pure view logic and for quicker implementation it does not get updated by state
+    private fun toggleFilters() {
+        filters_container.visibility = if( filters_container.visibility == View.GONE ) {
+            View.VISIBLE
+        }else {
+            View.GONE
+        }
     }
 }

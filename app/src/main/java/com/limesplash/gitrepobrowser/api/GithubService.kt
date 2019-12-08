@@ -23,20 +23,20 @@ class GithubService {
             client.connectTimeout(10, TimeUnit.SECONDS)
             client.readTimeout(30, TimeUnit.SECONDS)
 
-            client.interceptors().add(object : Interceptor {
-                @Throws(IOException::class)
-                override fun intercept(chain: Interceptor.Chain?): Response? {
-                    try {
-                        return chain!!.proceed(chain.request())
-                    } catch (exception: SocketTimeoutException) {
-                        exception.printStackTrace()
-                    } catch (exception: InterruptedIOException) {
-                        exception.printStackTrace()
-                    }
-                    return null
-                    //chain!!.proceed(chain.request())
-                }
-            })
+//            client.interceptors().add(object : Interceptor {
+//                @Throws(IOException::class)
+//                override fun intercept(chain: Interceptor.Chain?): Response? {
+//                    try {
+//                        return chain!!.proceed(chain.request())
+//                    } catch (exception: SocketTimeoutException) {
+//                        exception.printStackTrace()
+//                    } catch (exception: InterruptedIOException) {
+//                        exception.printStackTrace()
+//                    }
+//                    return null
+//                    //chain!!.proceed(chain.request())
+//                }
+//            })
             return Retrofit.Builder()
                 .baseUrl(URL)
                 .client(client.build())

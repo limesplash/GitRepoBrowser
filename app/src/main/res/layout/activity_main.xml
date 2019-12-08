@@ -9,12 +9,62 @@
 
     <EditText
         android:id="@+id/search_text"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Search for repository"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/show_filters"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/show_filters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="FILTERS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:padding="10dp"
+        android:id="@+id/filters_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/search_text"
+        android:gravity="center">
+
+        <EditText
+
+            android:id="@+id/topic_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Topic here"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent" />
+
+        <EditText
+
+            android:id="@+id/lang_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Language here" />
+
+        <Button
+            android:id="@+id/apply_filters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="APPLY"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/result_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filters_container"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/repos_list"
@@ -22,6 +72,6 @@
         android:layout_height="wrap_content"
         app:layoutManager="LinearLayoutManager"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/search_text" />
+        app:layout_constraintTop_toBottomOf="@+id/result_count" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
