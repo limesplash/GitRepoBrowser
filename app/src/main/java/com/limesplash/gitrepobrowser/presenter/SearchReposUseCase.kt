@@ -8,6 +8,7 @@ import io.reactivex.Observable
 
 object SearchReposUseCase {
 
+    val githubApi = null
     fun searchRepos(searchQuery: SearchQuery) : Observable<SearchResult> {
         return GithubService.retrofit().create(GithubApi::class.java).searchRepositories(searchQuery.toQueryString())
     }
