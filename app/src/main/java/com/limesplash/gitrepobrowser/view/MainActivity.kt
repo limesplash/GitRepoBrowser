@@ -1,7 +1,8 @@
-package com.limesplash.gitrepobrowser
+package com.limesplash.gitrepobrowser.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.limesplash.gitrepobrowser.R
 
 class MainActivity : AppCompatActivity() {
 
