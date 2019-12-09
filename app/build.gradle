@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.2"
@@ -20,6 +22,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    kapt {
+        generateStubs = true
     }
 }
 
@@ -49,4 +54,9 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:' + rootProject.ext.rxBindingVersion
     implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:' + rootProject.ext.rxBindingVersion
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:' + rootProject.ext.rxBindingVersion
+
+
+    // Dagger
+    kapt 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerVersion
+    implementation 'com.google.dagger:dagger:'+ rootProject.ext.daggerVersion
 }

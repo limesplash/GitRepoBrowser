@@ -16,33 +16,5 @@ import java.util.concurrent.TimeUnit
 class GithubService {
     companion object {
         val URL = "https://api.github.com"
-
-        fun retrofit(): Retrofit {
-            val client = OkHttpClient.Builder()
-
-            client.connectTimeout(10, TimeUnit.SECONDS)
-            client.readTimeout(30, TimeUnit.SECONDS)
-
-//            client.interceptors().add(object : Interceptor {
-//                @Throws(IOException::class)
-//                override fun intercept(chain: Interceptor.Chain?): Response? {
-//                    try {
-//                        return chain!!.proceed(chain.request())
-//                    } catch (exception: SocketTimeoutException) {
-//                        exception.printStackTrace()
-//                    } catch (exception: InterruptedIOException) {
-//                        exception.printStackTrace()
-//                    }
-//                    return null
-//                    //chain!!.proceed(chain.request())
-//                }
-//            })
-            return Retrofit.Builder()
-                .baseUrl(URL)
-                .client(client.build())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        }
     }
 }

@@ -9,6 +9,8 @@ interface GithubApi {
 
     @GET("/search/repositories")
     fun searchRepositories(@Query("q") query: String,
-                           @Query("sort") sort:String = "stars",
-                           @Query("order") order:String = "desc"): Observable<SearchResult>
+                           @Query("sort") sort: String = "stars",
+                           @Query("order") order: String = "desc",
+                           @Query("per_page") perPage: Int = 100,
+                           @Query("page") page: Int = 1): Observable<SearchResult>
 }

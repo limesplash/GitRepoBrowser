@@ -1,5 +1,6 @@
 package com.limesplash.gitrepobrowser.model
 
-data class GitReposViewState(
-    val searchResult: SearchResult = SearchResult()
-)
+sealed class GitReposViewState {
+    class ResultsState( val searchResult: SearchResult = SearchResult()): GitReposViewState()
+    class Loading(): GitReposViewState()
+}

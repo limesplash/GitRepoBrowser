@@ -31,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/search_text"
+        android:visibility="gone"
         android:gravity="center">
 
         <EditText
@@ -38,7 +39,7 @@
             android:id="@+id/topic_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Topic here"
+            android:hint="Topic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="parent" />
 
@@ -47,7 +48,7 @@
             android:id="@+id/lang_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Language here" />
+            android:hint="Language" />
 
         <Button
             android:id="@+id/apply_filters"

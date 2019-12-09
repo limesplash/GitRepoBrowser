@@ -24,6 +24,6 @@ class ReposAdapter(private val repos: List<GithubRepo> = emptyList()):RecyclerVi
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val repo = repos[position]
-       holder.titleView.text = repo.fullName + " - " + repo.description
+       holder.titleView.text = repo.toString()
     }
 }

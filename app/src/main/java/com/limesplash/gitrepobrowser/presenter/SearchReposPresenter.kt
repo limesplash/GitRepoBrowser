@@ -8,12 +8,16 @@ import com.limesplash.gitrepobrowser.view.GitReposView
 import com.limesplash.gitrepobrowser.view.UIEvent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class SearchReposPresenter: MviBasePresenter<GitReposView, GitReposViewState>() {
+class SearchReposPresenter @Inject constructor(val searchReposUseCase: SearchReposUseCase):
+                                                        MviBasePresenter<GitReposView, GitReposViewState>() {
 
     override fun bindIntents() {
+
         val userInput = intent(GitReposView::emitUserInput)
             .subscribeOn(Schedulers.io())
             .debounce(500, TimeUnit.MILLISECONDS)
@@ -21,13 +25,18 @@ class SearchReposPresenter: MviBasePresenter<GitReposView, GitReposViewState>() 
                 when(it) {
                     is UIEvent.UISerchRepoEvent -> {
                         if(it.query.isNotEmpty())
-                            SearchReposUseCase.searchRepos(SearchQuery(it.query, it.topic, it.lang))
-                                .map { GitReposViewState(it) }
+                            searchReposUseCase.searchRepos(SearchQuery(it.query, it.topic, it.lang))
+                                .map { GitReposViewState.ResultsState(it) as GitReposViewState }
+                                .startWith(GitReposViewState.Loading())
                         else
-                            Observable.just(GitReposViewState(SearchResult()))
+                            Observable.just(GitReposViewState.ResultsState(SearchResult()))
 
                     }
                 }
+            }
+            .doOnError {
+                //Nothing ?
+                it.printStackTrace()
             }
             .observeOn(AndroidSchedulers.mainThread())
 
