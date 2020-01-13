@@ -8,15 +8,12 @@ data class SearchQuery(val query: String, val topic: String? = null, val lang: S
         var addParam: ( String, String) -> Unit = { paramName: String, paramValue: String ->
             res+="+$paramName:$paramValue"
         }
-        topic?.let {
-            if (it.isNotEmpty())
-                addParam("topic",topic)
-        }
+        if(!topic.isNullOrBlank())
+            addParam("topic",topic)
 
-        lang?.let {
-            if (it.isNotEmpty())
-                addParam("lang",lang)
-        }
+        if(!lang.isNullOrBlank())
+            addParam("lang",lang)
+
 
         return res
     }

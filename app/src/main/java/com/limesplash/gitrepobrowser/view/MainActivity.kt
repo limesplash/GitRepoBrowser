@@ -28,7 +28,6 @@ class MainActivity: GitReposView,  MviActivity<GitReposView, SearchReposPresente
         searchQueryObservable = RxTextView.textChangeEvents(search_text)
             .observeOn(AndroidSchedulers.mainThread())
             .debounce(200, TimeUnit.MILLISECONDS)
-            .filter { it != null }
             .map { it.text().toString() }
 
         applyFiltersObservable = RxView.clicks(apply_filters)

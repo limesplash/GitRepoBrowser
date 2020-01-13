@@ -1,5 +1,6 @@
 package com.limesplash.gitrepobrowser.view
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,8 @@ class ReposAdapter(private val repos: List<GithubRepo> = emptyList()):RecyclerVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item, parent, false)
+        val view = (parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+        .inflate(R.layout.list_item, parent, false)
         return ViewHolder(view)
     }
 

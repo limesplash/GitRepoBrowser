@@ -1,20 +1,15 @@
 package com.limesplash.gitrepobrowser
 
 import com.limesplash.gitrepobrowser.api.GithubApi
-import com.limesplash.gitrepobrowser.api.GithubService
+import com.limesplash.gitrepobrowser.presenter.ApiSearchReposUseCase
 import com.limesplash.gitrepobrowser.presenter.SearchReposPresenter
-import dagger.Component
+import com.limesplash.gitrepobrowser.presenter.SearchReposUseCase
 import dagger.Module
 import dagger.Provides
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.io.InterruptedIOException
-import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -47,18 +42,28 @@ class GitReposModule{
 
     @Singleton
     @Provides
-    fun retrofit(okHTTP: OkHttpClient): Retrofit = Retrofit.Builder()
-                .baseUrl(GithubService.URL)
-                .client(okHTTP)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+    fun retrofit(okHTTP: OkHttpClient): Retrofit = retrofit(okHTTP, BuildConfig.GITHUB_HOST_URL)
 
-
+    /*
+        expose for testing
+     */
+    fun retrofit(okHTTP: OkHttpClient, baseUrl: String): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .client(okHTTP)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
 
     @Singleton
     @Provides
     fun githubApi(retrofit: Retrofit): GithubApi = retrofit.create(GithubApi::class.java)
+
+    @Provides
+    fun presenterSchedulers(): SearchReposPresenter.SchedulerProvider = SearchReposPresenter.DefaultSchedulerProvider()
+
+    @Provides
+    fun presenterApiUseCase(api :GithubApi): SearchReposUseCase = ApiSearchReposUseCase(api)
+
 
 }

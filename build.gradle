@@ -26,3 +26,18 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    retrofitVersion = '2.6.0'
+    gsonVersion = '2.6.2'
+    supportLibVersion = '28.0.0'
+    glideVersion = '4.8.0'
+    rxJava = '2.2.15'
+    rxAndroid = '2.1.0'
+    mosbyMvi = '3.1.1'
+    rxBindingVersion = '2.0.0'
+    daggerVersion='2.25.2'
+    powermockVersion='2.0.2'//'1.7.4'//2.0.2
+    espressoVersion='3.1.0'//'3.0.2'//'1.7.4'//2.0.2
+    androidXtestVersion='1.1.0'
+}
