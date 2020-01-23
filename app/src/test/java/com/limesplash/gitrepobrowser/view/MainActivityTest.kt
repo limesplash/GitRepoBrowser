@@ -1,66 +1,45 @@
 package com.limesplash.gitrepobrowser.view
 
-import androidx.test.core.app.ActivityScenario.*
-import android.text.Editable
-import android.view.View
 import android.widget.TextView
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.Espresso.*
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions.*
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.core.app.ActivityScenario.launch
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.ActivityTestRule
+import com.limesplash.gitrepobrowser.AbsRetrofitTest
 import com.limesplash.gitrepobrowser.R
 import com.limesplash.gitrepobrowser.model.GitReposViewState
 import com.limesplash.gitrepobrowser.model.GithubRepo
 import com.limesplash.gitrepobrowser.model.SearchResult
-import com.limesplash.gitrepobrowser.testScheduler
-import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.observers.TestObserver
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.TestScheduler
 import kotlinx.android.synthetic.main.activity_main.*
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class MainActivityTest:AbsRetrofitTest() {
 
     lateinit var activityScenario: ActivityScenario<MainActivity>
 
-    var scheduler:TestScheduler = testScheduler
 
     @Before
-    fun init() {
-
-//        scheduler = TestScheduler()
-        scheduler.start()
-//        activityScenario = launch(MainActivity::class.java)
-        RxJavaPlugins.setIoSchedulerHandler { scheduler }
-        RxJavaPlugins.setComputationSchedulerHandler { scheduler }
-        RxJavaPlugins.setNewThreadSchedulerHandler { scheduler }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
-
+    override fun init() {
+        super.init()
         activityScenario = launch(MainActivity::class.java)
 
     }
 
     @After
-    fun done() {
-        scheduler.triggerActions()
-        scheduler.shutdown()
+    override fun done() {
+        super.done()
         activityScenario.moveToState(Lifecycle.State.DESTROYED)
         activityScenario.close()
     }

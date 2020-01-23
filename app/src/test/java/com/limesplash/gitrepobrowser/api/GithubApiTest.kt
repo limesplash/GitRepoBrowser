@@ -35,8 +35,6 @@ class GithubApiTest {
     fun init() {
 
         mockWebServer.start(8080)
-//        PowerMockito.mockStatic(BuildConfig::class.java)
-//        PowerMockito.`when`(BuildConfig.GITHUB_HOST_URL).thenReturn(mockWebServer.url("/").toString())
 
         with(GitReposModule()) {
             api = retrofit(okHTTPClient(),mockWebServer.url("/").toString()).create(GithubApi::class.java)

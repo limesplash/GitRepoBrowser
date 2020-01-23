@@ -35,6 +35,7 @@ class MainActivityInstrumentedTest{
     @Before
     fun setUp() {
         val scheduler = Schedulers.from(AsyncTask.THREAD_POOL_EXECUTOR)
+        RxJavaPlugins.reset()
         RxJavaPlugins.setIoSchedulerHandler { scheduler }
         RxJavaPlugins.setComputationSchedulerHandler { scheduler }
         RxJavaPlugins.setNewThreadSchedulerHandler { scheduler }
@@ -47,7 +48,7 @@ class MainActivityInstrumentedTest{
         onView(withId(R.id.search_text))
             .perform(ViewActions.typeText("Robolectric"))
 
-        Thread.sleep(5000)
+        Thread.sleep(7000)
 
         assertEquals("robolectric - Android Unit Testing Framework", (activity.repos_list.getChildAt(0) as TextView).text)
 

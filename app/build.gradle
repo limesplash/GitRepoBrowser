@@ -10,6 +10,7 @@ android {
 
     compileSdkVersion 28
     buildToolsVersion "29.0.2"
+
     defaultConfig {
         applicationId "com.limesplash.gitrepobrowser"
         minSdkVersion 22
@@ -19,6 +20,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "GITHUB_HOST_URL", "\"https://api.github.com\"")
     }
+
     buildTypes {
 
         release {
@@ -27,12 +29,24 @@ android {
 
         }
     }
+
     kapt {
         generateStubs = true
     }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
+        }
+    }
+
+    sourceSets {
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDirs += sharedTestDir
+        }
+        androidTest {
+            java.srcDirs += sharedTestDir
         }
     }
 }

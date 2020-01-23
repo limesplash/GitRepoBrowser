@@ -1,69 +1,38 @@
 package com.limesplash.gitrepobrowser.presenter
 
+import com.limesplash.gitrepobrowser.AbsRetrofitTest
 import com.limesplash.gitrepobrowser.model.GitReposViewState
 import com.limesplash.gitrepobrowser.model.GithubRepo
 import com.limesplash.gitrepobrowser.model.SearchQuery
 import com.limesplash.gitrepobrowser.model.SearchResult
-import com.limesplash.gitrepobrowser.testScheduler
 import com.limesplash.gitrepobrowser.view.GitReposView
 import com.limesplash.gitrepobrowser.view.UIEvent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Observable
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.TestScheduler
-import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 
-class SearchReposPresenterTest {
-
-    companion object {
-        const val DEBOUNCE_TIME_MILLS = 500L
-    }
+class SearchReposPresenterTest: AbsRetrofitTest() {
 
     lateinit var presenter: SearchReposPresenter
     lateinit var gitReposView: GitReposView
     lateinit var searchReposUseCase: SearchReposUseCase
 
-    lateinit var scheduler: TestScheduler
-
     @Before
-    fun initPresenter() {
+    override fun init() {
+        super.init()
         searchReposUseCase = mockk()
 
         every { searchReposUseCase.searchRepos(any()) } returns Observable.just(SearchResult())
 
-
-        val schedulers = mockk<SearchReposPresenter.SchedulerProvider>()
-
-        scheduler = testScheduler
-        scheduler.start()
-
-        every { schedulers.provideBackgroundScheduler() }.returns(scheduler)
-        every { schedulers.provideForegroundScheduler() }.returns(scheduler)
-
-        presenter = SearchReposPresenter(searchReposUseCase, schedulers)
+        presenter = SearchReposPresenter(searchReposUseCase)
 
         gitReposView = mockk()
 
-        RxJavaPlugins.setErrorHandler {  } //hide logs
-
-        RxJavaPlugins.setIoSchedulerHandler { scheduler }
-        RxJavaPlugins.setComputationSchedulerHandler { scheduler }
-        RxJavaPlugins.setNewThreadSchedulerHandler { scheduler }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
-
-//        every { gitReposView.emitUserInput() }.returns(Observable.just(UIEvent.UISerchRepoEvent("")))
-    }
-
-    @After
-    fun done() {
-        scheduler.shutdown()
     }
 
     @Test
